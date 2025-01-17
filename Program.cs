@@ -34,11 +34,11 @@ app.UseCors("Any");
 // app.UseHttpsRedirection();
 
 app.MapGet("/events", async (HttpContext ctx, ItemService itemService, CancellationToken ct) => {
-	var token = ctx.Request.Headers.Authorization;
-	Console.WriteLine("Tokens " + JsonSerializer.Serialize(token));
+	var token = ctx.Request.Headers.Authorization.First();
+	Console.WriteLine("Received connection for " + token);
 	ctx.Response.Headers.Append("Content-Type", "text/event-stream");
 	while(!ct.IsCancellationRequested) {
-		var item = await itemService.WaitForNewItem();
+		var item = await itemService.WaitForNewItem(token);
 		if(item != null) {
 			await ctx.Response.WriteAsync($"event: {item.GetType().Name}\n", ct);
 			await ctx.Response.WriteAsync("data: ", ct);

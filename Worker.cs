@@ -26,7 +26,7 @@ public class Worker(IBus _bus) : BackgroundService {
                     stoppingToken);
             }
             id++;
-            await Task.Delay(TimeSpan.FromSeconds(Random.Shared.Next(1,10)), stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(Random.Shared.Next(2,10)), stoppingToken);
         }
     }
 }
